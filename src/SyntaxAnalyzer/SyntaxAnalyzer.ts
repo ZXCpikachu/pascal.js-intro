@@ -79,12 +79,7 @@ export class SyntaxAnalyzer {
 
             operationSymbol = this.symbol;
             this.nextSym();
-
-            // Когда ожидается очередной "символ", т.е. выражение не завершено.
-            if (this.symbol === null) {
-                throw 'The expression is not completed.';
-            }
-
+            
             let secondTerm: TreeNodeBase = this.scanTerm();
 
             switch (operationSymbol.symbolCode) {
@@ -142,7 +137,7 @@ export class SyntaxAnalyzer {
             this.nextSym();
             multiplier = this.scanMultiplier();
             multiplier = new UnaryMinus(operationSymbol, multiplier);
-        } else if (this.symbol !== null && this.symbol.symbolCode === SymbolsCodes.integerConst) {
+        } else if (this.symbol !== null) {
             multiplier = new NumberConstant(this.symbol);
             this.accept(SymbolsCodes.integerConst);
         } else {
