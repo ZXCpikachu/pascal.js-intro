@@ -137,13 +137,10 @@ export class SyntaxAnalyzer {
             this.nextSym();
             multiplier = this.scanMultiplier();
             multiplier = new UnaryMinus(operationSymbol, multiplier);
-        } else if (this.symbol !== null) {
+        } else  {
             multiplier = new NumberConstant(this.symbol);
             this.accept(SymbolsCodes.integerConst);
-        } else {
-            throw 'Number expected';
         }
-
         return multiplier;
     }
 }

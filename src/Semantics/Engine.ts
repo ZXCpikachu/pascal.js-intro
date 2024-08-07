@@ -75,11 +75,6 @@ export class Engine {
             let result = leftOperand.value / rightOperand.value;
 
             return new NumberVariable(result);
-        } else if (expression instanceof UnaryMinus) {
-            let rightOperand = this.evaluateSimpleExpression(expression.right);
-            let result = -rightOperand.value;
-
-            return new NumberVariable(result);
         } else {
             return this.evaluateMultiplier(expression);
         }
@@ -88,8 +83,13 @@ export class Engine {
     evaluateMultiplier(expression: TreeNodeBase) {
         if (expression instanceof NumberConstant) {
             return new NumberVariable(expression.symbol.value);
+        } else if (expression instanceof UnaryMinus) {
+            let rightOperand = this.evaluateSimpleExpression(expression.right);
+            let result = -rightOperand.value;
+
+            return new NumberVariable(result);
         } else {
             throw 'Number Constant expected.';
         }
     }
-};
+}
