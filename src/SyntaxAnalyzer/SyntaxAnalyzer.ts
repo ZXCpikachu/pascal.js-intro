@@ -131,16 +131,23 @@ export class SyntaxAnalyzer {
     scanMultiplier(): TreeNodeBase {
         let multiplier: TreeNodeBase;
         let operationSymbol: SymbolBase | null = null;
-
+    
         if (this.symbol !== null && this.symbol.symbolCode === SymbolsCodes.minus) {
             operationSymbol = this.symbol;
             this.nextSym();
-            multiplier = this.scanMultiplier();
+            multiplier = this.scanMultiplier(); // рекурсивный вызов для обработки унарного минуса
             multiplier = new UnaryMinus(operationSymbol, multiplier);
-        } else  {
+        } else if (this.symbol !== null && this.symbol.symbolCode === SymbolsCodes.integerConst) {
             multiplier = new NumberConstant(this.symbol);
             this.accept(SymbolsCodes.integerConst);
+        } else if (this.symbol !== null && this.symbol.symbolCode === SymbolsCodes.leftParen) {
+            this.accept(SymbolsCodes.leftParen);
+            multiplier = this.scanExpression();
+            this.accept(SymbolsCodes.rightParen);
+        } else {
+            throw 'Number or ( expected';
         }
+    
         return multiplier;
     }
 }

@@ -29,3 +29,7 @@ test('result = -3', () => {
 test('result = 20', () => {
   expect(pjs.engine.results[4]).toBe(20);
 });
+test('result = 1', () => {
+  expect(pjs.engine.results[5]).toBe(1);
+});
+
