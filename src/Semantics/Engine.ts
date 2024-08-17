@@ -7,6 +7,8 @@ import { NumberVariable } from './Variables/NumberVariable';
 import { TreeNodeBase } from '../SyntaxAnalyzer/Tree/TreeNodeBase';
 import { UnaryMinus } from '../SyntaxAnalyzer/Tree/UnaryMinus';
 import { BinaryOperation } from 'src/SyntaxAnalyzer/Tree/BinaryOperation';
+import { Assignment } from '../SyntaxAnalyzer/Tree/Assignment';
+import { Variable } from '../Semantics/Variables/Variable';
 
 export class Engine {
     /**
@@ -20,10 +22,13 @@ export class Engine {
      * лежит какой-то узел, описывающий по сути "последнюю" по вложенности операцию
      */
     trees: TreeNodeBase[];
+    variables: { [key: string]: NumberVariable };
+
 
     constructor(trees: TreeNodeBase[]) {
         this.trees = trees;
         this.results = [];
+        this.variables = {};
     }
 
     run() {
@@ -81,16 +86,27 @@ export class Engine {
         }
     }
 
-    evaluateMultiplier(expression: TreeNodeBase) {
+    evaluateMultiplier(expression: TreeNodeBase): NumberVariable {
         if (expression instanceof NumberConstant) {
             return new NumberVariable(expression.symbol.value);
         } else if (expression instanceof UnaryMinus) {
             let rightOperand = this.evaluateSimpleExpression(expression.right);
             let result = -rightOperand.value;
             return new NumberVariable(result);
+        }else if (expression instanceof Assignment) {
+            let variableName = expression.left.stringValue;
+            let value = this.evaluateSimpleExpression(expression.right);
+            this.variables[variableName] = value;
+            return value;
+        } else if (expression instanceof Variable) {
+            let variableName = expression.name.stringValue;
+            if (this.variables[variableName] !== undefined) {
+                return this.variables[variableName];
+            } else {
+                throw `Variable ${variableName} is not defined.`;
+            }
         } else if (expression instanceof BinaryOperation){
             return this.evaluateSimpleExpression(expression);
-
         }else {
             throw 'Number Constant expected.';
         }

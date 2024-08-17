@@ -8,4 +8,5 @@ export enum SymbolsCodes {
     endOfLine = 'eol',
     leftParen = '(',
     rightParen = ')',    
+    assignment = '=',
 }

@@ -8,6 +8,8 @@ import { LexicalAnalyzer } from '../LexicalAnalyzer/LexicalAnalyzer';
 import { TreeNodeBase } from './Tree/TreeNodeBase';
 import { SymbolBase } from '../LexicalAnalyzer/Symbols/SymbolBase';
 import { UnaryMinus } from './Tree/UnaryMinus';
+import { Assignment } from './Tree/Assignment'; 
+import { Variable } from '../Semantics/Variables/Variable';
 
 /**
  * Синтаксический анализатор - отвечает за построение синтаксического дерева
@@ -144,7 +146,17 @@ export class SyntaxAnalyzer {
             this.nextSym();
             multiplier = this.scanExpression();
             this.accept(SymbolsCodes.rightParen);
-        } else {
+        }else if (this.symbol !== null && this.symbol.symbolCode === SymbolsCodes.identifier) {
+            let variable = this.symbol;
+            this.nextSym();
+            if (this.symbol !== null && (this.symbol.symbolCode as SymbolsCodes) === SymbolsCodes.assignment) {
+                this.accept(SymbolsCodes.assignment);
+                let expression = this.scanExpression();
+                return new Assignment(variable, expression);
+            } else {
+                multiplier = new Variable(variable);
+            }
+        }  else {
             throw 'Number or ( expected';
         }
     
