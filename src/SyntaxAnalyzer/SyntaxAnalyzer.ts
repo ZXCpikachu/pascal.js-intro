@@ -139,9 +139,9 @@ export class SyntaxAnalyzer {
             multiplier = new UnaryMinus(operationSymbol, multiplier);
         } else if (this.symbol !== null && this.symbol.symbolCode === SymbolsCodes.integerConst) {
             multiplier = new NumberConstant(this.symbol);
-            this.accept(SymbolsCodes.integerConst);
+            this.nextSym();
         } else if (this.symbol !== null && this.symbol.symbolCode === SymbolsCodes.leftParen) {
-            this.accept(SymbolsCodes.leftParen);
+            this.nextSym();
             multiplier = this.scanExpression();
             this.accept(SymbolsCodes.rightParen);
         } else {
