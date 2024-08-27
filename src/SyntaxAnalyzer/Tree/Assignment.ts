@@ -1,13 +1,13 @@
-import { SymbolBase } from '../../LexicalAnalyzer/Symbols/SymbolBase';
-import { TreeNodeBase } from './TreeNodeBase';
+import { SymbolBase } from "src/LexicalAnalyzer/Symbols/SymbolBase";
+import { TreeNodeBase } from "./TreeNodeBase";
 
 export class Assignment extends TreeNodeBase {
-    left: SymbolBase; 
-    right: TreeNodeBase;
+    identifier: string;
+    expression: TreeNodeBase;
 
-    constructor(left: SymbolBase, right: TreeNodeBase) {
-        super(left);
-        this.left = left; 
-        this.right = right;
+    constructor(symbol: SymbolBase, expression: TreeNodeBase) {
+        super(symbol); 
+        this.identifier = symbol.value.toString();
+        this.expression = expression;
     }
 }

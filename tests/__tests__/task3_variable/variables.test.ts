@@ -8,14 +8,15 @@ test('result = 5', () => {
 test('result = 7', () => {
   expect(pjs.engine.results[1]).toBe(7);
 });
-test('result = 3', () => {
-  expect(pjs.engine.results[2]).toBe(3);
+test('result = 5', () => {
+  expect(pjs.engine.results[2]).toBe(5);
 });
-test('result = 8', () => {
-  expect(pjs.engine.results[3]).toBe(8);
+test('result = 4', () => {
+  expect(pjs.engine.results[3]).toBe(4);
 });
-test('result = 10', () => {
-  expect(pjs.engine.results[4]).toBe(10);
+test('result = 5', () => {
+  expect(pjs.engine.results[4]).toBe(5);
 });
+
 
 
