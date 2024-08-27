@@ -72,8 +72,6 @@ export class LexicalAnalyzer {
             return this.getSymbol(SymbolsCodes.identifier);
 
         } else if (/\n/.exec(this.char) !== null) {
-            this.fileIO.lineNumber++;
-            this.fileIO.charPosition = 0;
             this.char = this.fileIO.nextCh();
             return this.getSymbol(SymbolsCodes.endOfLine);
         } else {
