@@ -76,13 +76,16 @@ export class SyntaxAnalyzer {
 
         while (this.symbol !== null && (
             this.symbol.symbolCode === SymbolsCodes.plus ||
-            this.symbol.symbolCode === SymbolsCodes.minus
+            this.symbol.symbolCode === SymbolsCodes.minus ||
+            this.symbol.symbolCode === SymbolsCodes.assignment
         )) {
 
             operationSymbol = this.symbol;
             this.nextSym();
             
-            let secondTerm: TreeNodeBase = this.scanTerm();
+            let secondTerm: TreeNodeBase = 
+				(operationSymbol.symbolCode === SymbolsCodes.assignment) ? 
+					this.scanExpression() : this.scanTerm();
 
             switch (operationSymbol.symbolCode) {
                 case SymbolsCodes.plus:
@@ -91,6 +94,12 @@ export class SyntaxAnalyzer {
                 case SymbolsCodes.minus:
                     term = new Subtraction(operationSymbol, term, secondTerm);
                     break;
+                    case SymbolsCodes.assignment:
+                        if (term.symbol.symbolCode !== SymbolsCodes.identifier) {
+                            throw `Invalid assignment.`;
+                        }
+                        term = new Assignment(term.symbol, secondTerm);
+                        break;
             }
         }
 
@@ -149,13 +158,8 @@ export class SyntaxAnalyzer {
         }else if (this.symbol !== null && this.symbol.symbolCode === SymbolsCodes.identifier) {
             let variable = this.symbol;
             this.nextSym();
-            if (this.symbol !== null && (this.symbol.symbolCode as SymbolsCodes) === SymbolsCodes.assignment) {
-                this.accept(SymbolsCodes.assignment);
-                let expression = this.scanExpression();
-                return new Assignment(variable, expression);
-            } else {
-                multiplier = new Variable(variable);
-            }
+            multiplier = new Variable(variable);
+            
         }  else {
             throw 'Number or ( expected';
         }
